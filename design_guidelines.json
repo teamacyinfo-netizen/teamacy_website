@@ -1,0 +1,162 @@
+{
+  "identity": {
+    "name": "Teamacy",
+    "archetype": "Electric & Neon (Future, Speed, Disruption)",
+    "vibe": "Professional, Trust-building, Modern, Tech-forward, Agency-style",
+    "mission": "To act as a complete interface between users/clients and the company, allowing service discovery, enquiries, feedback, and secure admin management."
+  },
+  "typography": {
+    "font_family": {
+      "headings": "Space Grotesk, sans-serif",
+      "body": "Manrope, sans-serif",
+      "mono": "JetBrains Mono, monospace"
+    },
+    "scale": {
+      "h1": "text-5xl md:text-7xl font-bold tracking-tight leading-none",
+      "h2": "text-4xl md:text-5xl font-bold tracking-tight",
+      "h3": "text-2xl md:text-3xl font-semibold tracking-tight",
+      "body_large": "text-lg md:text-xl leading-relaxed text-muted-foreground",
+      "body_base": "text-base leading-relaxed text-muted-foreground",
+      "caption": "text-sm font-medium tracking-widest uppercase text-muted-foreground"
+    },
+    "imports": [
+      "@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Manrope:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');"
+    ]
+  },
+  "colors": {
+    "palette": {
+      "background": "#020617",
+      "foreground": "#f8fafc",
+      "card": "rgba(2, 6, 23, 0.7)",
+      "card_foreground": "#f8fafc",
+      "popover": "#020617",
+      "popover_foreground": "#f8fafc",
+      "primary": "#7c3aed",
+      "primary_foreground": "#ffffff",
+      "secondary": "#1e293b",
+      "secondary_foreground": "#f8fafc",
+      "muted": "#1e293b",
+      "muted_foreground": "#94a3b8",
+      "accent": "#2563eb",
+      "accent_foreground": "#ffffff",
+      "destructive": "#ef4444",
+      "destructive_foreground": "#ffffff",
+      "border": "#1e293b",
+      "input": "#1e293b",
+      "ring": "#7c3aed"
+    },
+    "gradients": {
+      "hero_glow": "bg-gradient-to-r from-violet-600 via-blue-600 to-cyan-500",
+      "text_gradient": "bg-clip-text text-transparent bg-gradient-to-r from-white via-white to-gray-400",
+      "card_border": "bg-gradient-to-b from-white/10 to-transparent"
+    },
+    "glassmorphism": {
+      "default": "backdrop-blur-xl bg-black/40 border border-white/10",
+      "heavy": "backdrop-blur-2xl bg-black/60 border border-white/10"
+    }
+  },
+  "layout_strategy": {
+    "marketing": {
+      "grid_type": "Tetris Grid",
+      "container": "max-w-7xl mx-auto px-6 md:px-12",
+      "spacing": "gap-8 md:gap-12",
+      "section_padding": "py-24 md:py-32"
+    },
+    "dashboard": {
+      "grid_type": "Control Room Grid",
+      "container": "w-full px-6 py-6",
+      "spacing": "gap-6",
+      "card_style": "bg-card border border-border rounded-xl p-6"
+    }
+  },
+  "components": {
+    "buttons": {
+      "primary": "bg-primary hover:bg-primary/90 text-white rounded-full px-8 py-6 text-lg font-medium transition-all hover:scale-105 hover:shadow-[0_0_20px_rgba(124,58,237,0.5)]",
+      "secondary": "bg-secondary hover:bg-secondary/80 text-white rounded-full px-8 py-6 text-lg font-medium border border-white/10",
+      "ghost": "hover:bg-white/5 text-white rounded-full px-6 py-4"
+    },
+    "cards": {
+      "feature": "group relative overflow-hidden rounded-3xl bg-white/5 border border-white/10 p-8 hover:border-primary/50 transition-colors duration-500",
+      "service": "relative h-[400px] rounded-3xl overflow-hidden group cursor-pointer"
+    },
+    "inputs": {
+      "default": "bg-white/5 border-white/10 focus:border-primary focus:ring-primary/20 rounded-xl h-12 px-4 text-white placeholder:text-gray-500"
+    }
+  },
+  "visual_enhancers": {
+    "textures": "Use subtle noise overlay (opacity 0.03) on the main background to prevent banding.",
+    "glows": "Use radial gradients behind hero images and key features: 'bg-primary/20 blur-[100px] rounded-full'",
+    "borders": "Use 1px borders with low opacity (white/10) for all cards. Add a 'tracing beam' effect on hover if possible."
+  },
+  "image_urls": {
+    "hero": {
+      "url": "https://images.unsplash.com/photo-1764258559704-0b7f0f02cae0?crop=entropy&cs=srgb&fm=jpg&q=85",
+      "alt": "Abstract blue purple neon technology wave",
+      "category": "Hero Background"
+    },
+    "about": {
+      "url": "https://images.unsplash.com/photo-1631038506857-6c970dd9ba02?crop=entropy&cs=srgb&fm=jpg&q=85",
+      "alt": "Diverse creative team working in modern dark office",
+      "category": "About Section"
+    },
+    "services": {
+      "software": {
+        "url": "https://images.unsplash.com/photo-1753998943413-8cba1b923c0e?crop=entropy&cs=srgb&fm=jpg&q=85",
+        "alt": "Software developer coding dark screen close up",
+        "category": "Service: Software Development"
+      },
+      "events": {
+        "url": "https://images.unsplash.com/photo-1618613403887-ed08ea9f8f6e?crop=entropy&cs=srgb&fm=jpg&q=85",
+        "alt": "Concert stage lighting purple blue",
+        "category": "Service: Event Management"
+      },
+      "branding": {
+        "url": "https://images.unsplash.com/photo-1627543858482-b98694bcb2fe?crop=entropy&cs=srgb&fm=jpg&q=85",
+        "alt": "Designer working on branding moodboard",
+        "category": "Service: Branding"
+      },
+      "marketing": {
+        "url": "https://images.unsplash.com/photo-1578070581071-d9b52bf80993?crop=entropy&cs=srgb&fm=jpg&q=85",
+        "alt": "Digital marketing analytics dashboard",
+        "category": "Service: Digital Marketing"
+      }
+    }
+  },
+  "motion": {
+    "library": "framer-motion",
+    "variants": {
+      "fadeInUp": {
+        "initial": { "opacity": 0, "y": 20 },
+        "animate": { "opacity": 1, "y": 0 },
+        "transition": { "duration": 0.5, "ease": "easeOut" }
+      },
+      "staggerContainer": {
+        "animate": { "transition": { "staggerChildren": 0.1 } }
+      }
+    }
+  },
+  "instructions_to_main_agent": [
+    "1. SETUP: Install 'framer-motion', 'lucide-react', 'clsx', 'tailwind-merge' if not present.",
+    "2. THEME: Update 'tailwind.config.js' with the colors defined in this JSON. Override the default shadcn colors.",
+    "3. FONTS: Add the Google Fonts import to 'index.css' and update font families in tailwind config.",
+    "4. LAYOUT: Build the Landing Page using the 'Tetris Grid' philosophy. Do not use standard 3-column layouts. Make it asymmetrical.",
+    "5. DASHBOARD: Build the Admin Dashboard using the 'Control Room' density. Use a sidebar layout.",
+    "6. IMAGES: Use the provided image URLs. Do not use placeholders.",
+    "7. INTERACTION: Add hover states to ALL interactive elements. Use the 'glow' effects specified.",
+    "8. FORMS: Use shadcn/ui form components but style them with the 'inputs.default' classes defined above.",
+    "9. TESTING: Add 'data-testid' to all buttons, inputs, and links."
+  ],
+  "UNIVERSAL_GUIDELINES_FOR_MAIN_AGENT": [
+    "Dark colors look good when used independently without gradients. DO NOT use dark colors as gradients.",
+    "Don't make generic centered layouts, simplistic gradients, and uniform styling.",
+    "Create depth through layered design elements with z-index hierarchy.",
+    "Use glass-morphism effects with backdrop filters (12-24px blur).",
+    "You MUST NOT apply universal transition. Eg: 'transition: all'. This results in breaking transforms.",
+    "You MUST NOT center align the app container.",
+    "Always use modern button styles like pill-shaped, or sharp button with interaction animations.",
+    "NEVER use AI assistant Emoji characters like 🤖🧠 etc for icons.",
+    "Every interaction needs micro-animations - hover states, transitions, parallax effects.",
+    "Use 2-3x more spacing than feels comfortable.",
+    "Subtle grain textures, noise overlays, custom cursors, selection states, and loading animations: separates good from extraordinary."
+  ]
+}
