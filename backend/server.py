@@ -327,11 +327,14 @@ async def get_feedback(admin: User = Depends(get_current_admin)):
 # Initialize admin user
 @app.on_event("startup")
 async def startup_event():
-    # Create admin user if not exists
+    # Delete old admin if exists with wrong email
+    await db.users.delete_many({"role": "admin"})
+    
+    # Create admin user with correct email
     admin_exists = await db.users.find_one({"email": admin_email}, {"_id": 0})
     if not admin_exists:
         admin_user = User(
-            name="Admin",
+            name="Teamacy Admin",
             email=admin_email,
             role="admin"
         )
