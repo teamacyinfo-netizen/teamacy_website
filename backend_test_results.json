@@ -1,0 +1,215 @@
+{
+  "total_tests": 14,
+  "passed_tests": 13,
+  "success_rate": 92.85714285714286,
+  "test_details": [
+    {
+      "test_name": "API Health Check",
+      "success": true,
+      "details": "Status: 200",
+      "response_data": {
+        "message": "Teamacy API is running"
+      }
+    },
+    {
+      "test_name": "User Registration",
+      "success": true,
+      "details": "Status: 200",
+      "response_data": {
+        "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyNGViY2YwMS02YmNmLTQwNGYtODRlOC1jNDhlYjZhMWRjMmQiLCJlbWFpbCI6InRlc3R1c2VyXzE0MzQwNUBleGFtcGxlLmNvbSIsInJvbGUiOiJ1c2VyIiwiZXhwIjoxNzY3ODgyODQ1fQ.NoCZgi-DSe944ZJz_7x--EiKM51GSQTVJHaXeI80x-s",
+        "token_type": "bearer",
+        "user": {
+          "id": "24ebcf01-6bcf-404f-84e8-c48eb6a1dc2d",
+          "name": "Test User 143405",
+          "email": "testuser_143405@example.com",
+          "role": "user",
+          "created_at": "2026-01-07T14:34:05.750859Z"
+        }
+      }
+    },
+    {
+      "test_name": "User Login",
+      "success": true,
+      "details": "Status: 200",
+      "response_data": {
+        "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyNGViY2YwMS02YmNmLTQwNGYtODRlOC1jNDhlYjZhMWRjMmQiLCJlbWFpbCI6InRlc3R1c2VyXzE0MzQwNUBleGFtcGxlLmNvbSIsInJvbGUiOiJ1c2VyIiwiZXhwIjoxNzY3ODgyODQ2fQ.kxGaCPyogor-SCO3aFTN8BEkHFvGyaoB3cQT3-1si0U",
+        "token_type": "bearer",
+        "user": {
+          "id": "24ebcf01-6bcf-404f-84e8-c48eb6a1dc2d",
+          "name": "Test User 143405",
+          "email": "testuser_143405@example.com",
+          "role": "user",
+          "created_at": "2026-01-07T14:34:05.750859Z"
+        }
+      }
+    },
+    {
+      "test_name": "Admin Login",
+      "success": true,
+      "details": "Status: 200",
+      "response_data": {
+        "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI3MzVjMmJiYS05MGIxLTQwNTgtOGE1My1kZDA1ZjE5ZGVhMjgiLCJlbWFpbCI6InRlYW1hY3lhZG1pbkBnbWFpbC5jb20iLCJyb2xlIjoiYWRtaW4iLCJleHAiOjE3Njc4ODI4NDZ9.ZgOeiG-XRsDrGRBzUN7Sn56f_ltSlX753rpkHF1hcU0",
+        "token_type": "bearer",
+        "user": {
+          "id": "735c2bba-90b1-4058-8a53-dd05f19dea28",
+          "name": "Admin",
+          "email": "teamacyadmin@gmail.com",
+          "role": "admin",
+          "created_at": "2026-01-07T14:26:14.345412Z"
+        }
+      }
+    },
+    {
+      "test_name": "Admin Role Verification",
+      "success": true,
+      "details": "Admin role confirmed",
+      "response_data": null
+    },
+    {
+      "test_name": "Enquiry Submission",
+      "success": true,
+      "details": "Status: 200",
+      "response_data": {
+        "id": "8d0d7ff6-9417-40f0-997e-45ab92f3dbd4",
+        "name": "Test Customer",
+        "email": "customer@example.com",
+        "subject": "Software Development Inquiry",
+        "message": "I'm interested in your software development services. Please visit https://example.com for more details.",
+        "created_at": "2026-01-07T14:34:06.568941Z"
+      }
+    },
+    {
+      "test_name": "Feedback Submission",
+      "success": true,
+      "details": "Status: 200",
+      "response_data": {
+        "id": "0cdfdf6f-daa5-47ce-a245-d2b44fab0a19",
+        "name": "Happy Client",
+        "email": "client@example.com",
+        "subject": "Great Service",
+        "message": "Your team did an excellent job on our project. Check out our website at https://client-website.com",
+        "created_at": "2026-01-07T14:34:09.057620Z"
+      }
+    },
+    {
+      "test_name": "Admin Get Enquiries",
+      "success": true,
+      "details": "Status: 200",
+      "response_data": [
+        {
+          "id": "8d0d7ff6-9417-40f0-997e-45ab92f3dbd4",
+          "name": "Test Customer",
+          "email": "customer@example.com",
+          "subject": "Software Development Inquiry",
+          "message": "I'm interested in your software development services. Please visit https://example.com for more details.",
+          "created_at": "2026-01-07T14:34:06.568941Z"
+        }
+      ]
+    },
+    {
+      "test_name": "Admin Get Feedback",
+      "success": true,
+      "details": "Status: 200",
+      "response_data": [
+        {
+          "id": "0cdfdf6f-daa5-47ce-a245-d2b44fab0a19",
+          "name": "Happy Client",
+          "email": "client@example.com",
+          "subject": "Great Service",
+          "message": "Your team did an excellent job on our project. Check out our website at https://client-website.com",
+          "created_at": "2026-01-07T14:34:09.057620Z"
+        }
+      ]
+    },
+    {
+      "test_name": "Enquiries Without Token",
+      "success": false,
+      "details": "Expected 401, got 403. Response: {'detail': 'Admin access required'}",
+      "response_data": {
+        "detail": "Admin access required"
+      }
+    },
+    {
+      "test_name": "Enquiries With User Token",
+      "success": true,
+      "details": "Status: 403",
+      "response_data": {
+        "detail": "Admin access required"
+      }
+    },
+    {
+      "test_name": "Registration Invalid Email",
+      "success": true,
+      "details": "Status: 422",
+      "response_data": {
+        "detail": [
+          {
+            "type": "value_error",
+            "loc": [
+              "body",
+              "email"
+            ],
+            "msg": "value is not a valid email address: An email address must have an @-sign.",
+            "input": "invalid-email",
+            "ctx": {
+              "reason": "An email address must have an @-sign."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "test_name": "Login Wrong Credentials",
+      "success": true,
+      "details": "Status: 401",
+      "response_data": {
+        "detail": "Invalid email or password"
+      }
+    },
+    {
+      "test_name": "Enquiry Missing Fields",
+      "success": true,
+      "details": "Status: 422",
+      "response_data": {
+        "detail": [
+          {
+            "type": "missing",
+            "loc": [
+              "body",
+              "email"
+            ],
+            "msg": "Field required",
+            "input": {
+              "name": "Test"
+            },
+            "url": "https://errors.pydantic.dev/2.12/v/missing"
+          },
+          {
+            "type": "missing",
+            "loc": [
+              "body",
+              "subject"
+            ],
+            "msg": "Field required",
+            "input": {
+              "name": "Test"
+            },
+            "url": "https://errors.pydantic.dev/2.12/v/missing"
+          },
+          {
+            "type": "missing",
+            "loc": [
+              "body",
+              "message"
+            ],
+            "msg": "Field required",
+            "input": {
+              "name": "Test"
+            },
+            "url": "https://errors.pydantic.dev/2.12/v/missing"
+          }
+        ]
+      }
+    }
+  ]
+}
