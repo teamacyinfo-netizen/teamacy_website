@@ -7,7 +7,7 @@ from datetime import datetime
 import time
 
 class TeamacyAPITester:
-    def __init__(self, base_url="https://teamacy-pro.preview.emergentagent.com"):
+    def __init__(self, base_url="http://127.0.0.1:8000"):
         self.base_url = base_url
         self.api_url = f"{base_url}/api"
         self.token = None

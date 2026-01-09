@@ -121,7 +121,7 @@ const Contact = ({ user, setUser }) => {
             >
               <Mail className="text-primary mx-auto mb-4" size={32} />
               <h3 className="font-heading font-semibold text-white mb-2">Email</h3>
-              <p className="text-muted-foreground">teamacyadmin@gmail.com</p>
+              <p className="text-muted-foreground">teamacy.info@gmail.com</p>
             </motion.div>
 
             <motion.div
@@ -133,7 +133,7 @@ const Contact = ({ user, setUser }) => {
             >
               <Phone className="text-primary mx-auto mb-4" size={32} />
               <h3 className="font-heading font-semibold text-white mb-2">Phone</h3>
-              <p className="text-muted-foreground">+1 (555) 123-4567</p>
+              <p className="text-muted-foreground">+91 90255 87446</p>
             </motion.div>
 
             <motion.div
@@ -145,7 +145,7 @@ const Contact = ({ user, setUser }) => {
             >
               <MapPin className="text-primary mx-auto mb-4" size={32} />
               <h3 className="font-heading font-semibold text-white mb-2">Location</h3>
-              <p className="text-muted-foreground">Global Services</p>
+              <p className="text-muted-foreground">India</p>
             </motion.div>
           </div>
         </div>

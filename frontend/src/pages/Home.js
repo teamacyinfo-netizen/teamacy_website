@@ -33,10 +33,10 @@ const Home = ({ user, setUser }) => {
   ];
 
   const stats = [
-    { number: "500+", label: "Projects Completed" },
-    { number: "200+", label: "Happy Clients" },
-    { number: "50+", label: "Team Members" },
-    { number: "15+", label: "Years Experience" }
+    { number: "2+", label: "Projects Completed" },
+    { number: "2+", label: "Happy Clients" },
+    { number: "5+", label: "Team Members" },
+    { number: "2+", label: "Years Experience" }
   ];
 
   return (

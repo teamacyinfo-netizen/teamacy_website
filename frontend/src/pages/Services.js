@@ -50,9 +50,9 @@ const Services = ({ user, setUser }) => {
     },
     {
       icon: <Shield size={48} />,
-      title: "Cybersecurity",
-      description: "Comprehensive security solutions to protect your digital assets and ensure compliance.",
-      features: ["Security Audits", "Penetration Testing", "Compliance Management", "Incident Response", "Security Training"],
+      title: "Projects",
+      description: "We offer end-to-end project support in both hardware and software, helping you design, develop, and successfully complete real-world projects..",
+      features: ["College Projects", "School Projects", "Iot Projects", "Project Training"],
       image: "https://images.unsplash.com/photo-1627543858482-b98694bcb2fe?crop=entropy&cs=srgb&fm=jpg&q=85"
     },
     {
