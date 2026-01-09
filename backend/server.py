@@ -3,32 +3,27 @@ from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
-import os, logging, asyncio, re
+import os, logging, re
 from pathlib import Path
 from pydantic import BaseModel, Field, EmailStr, ConfigDict
-from typing import List
 import uuid
 from datetime import datetime, timezone, timedelta
 import bcrypt
 import jwt
 import resend
 
-# Load .env
+# Load .env (local only)
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / ".env")
 
 # ENV
 mongo_url = os.environ["MONGO_URL"]
 db_name = os.environ["DB_NAME"]
-resend_api_key = os.environ["RESEND_API_KEY"]
-sender_email = os.environ["SENDER_EMAIL"]
 admin_email = os.environ["ADMIN_EMAIL"]
 admin_password = os.environ["ADMIN_PASSWORD"]
 jwt_secret = os.environ["JWT_SECRET"]
 jwt_algorithm = os.environ["JWT_ALGORITHM"]
 jwt_expiration = int(os.environ["JWT_EXPIRATION_HOURS"])
-
-resend.api_key = resend_api_key
 
 # DB
 client = AsyncIOMotorClient(mongo_url)
@@ -104,15 +99,13 @@ async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(s
         raise HTTPException(401, "User not found")
     return User(**user)
 
-async def get_current_admin(user: User = Depends(get_current_user)):
-    if user.role != "admin":
-        raise HTTPException(403, "Admin only")
-    return user
-
 def make_links_clickable(text):
     return re.sub(r'(https?://[^\s]+)', r'<a href="\1">\1</a>', text)
 
+# 🔥 FIXED RESEND EMAIL FUNCTION
 async def send_email_to_admin(subject, name, email, user_subject, message):
+    resend.api_key = os.environ["RESEND_API_KEY"]
+
     html = f"""
     <h2>{subject}</h2>
     <p><b>Name:</b> {name}</p>
@@ -122,15 +115,16 @@ async def send_email_to_admin(subject, name, email, user_subject, message):
     """
 
     try:
-        resend.Emails.send({
-            "from": sender_email,
-            "to": [admin_email],
+        response = resend.Emails.send({
+            "from": os.environ["SENDER_EMAIL"],
+            "to": [os.environ["ADMIN_EMAIL"]],
             "subject": subject,
             "html": html
         })
-        logger.info("Email sent to admin")
+
+        logger.info(f"RESEND RESPONSE: {response}")
     except Exception as e:
-        logger.error(f"Email failed: {e}")
+        logger.error(f"RESEND ERROR: {e}")
 
 # ---------------- ROUTES ----------------
 
@@ -174,7 +168,7 @@ async def enquiry(data: EnquiryCreate):
     await send_email_to_admin("New Enquiry – Teamacy", data.name, data.email, data.subject, data.message)
     return {"status": "ok"}
 
-# ---------------- ADMIN ----------------
+# ---------------- ADMIN AUTO CREATE ----------------
 
 @app.on_event("startup")
 async def create_admin():
