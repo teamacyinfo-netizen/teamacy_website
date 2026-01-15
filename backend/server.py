@@ -20,20 +20,18 @@ load_dotenv(ROOT_DIR / ".env")
 mongo_url = os.environ["MONGO_URL"]
 db_name = os.environ["DB_NAME"]
 
-# 🔐 Admin login (Dashboard)
-admin_login_email = os.environ["ADMIN_LOGIN_EMAIL"]
-admin_password = os.environ["ADMIN_PASSWORD"]
+ADMIN_LOGIN_EMAIL = os.environ["ADMIN_LOGIN_EMAIL"]   # 🔐 login email
+ADMIN_PASSWORD = os.environ["ADMIN_PASSWORD"]
 
-# 📩 Business inbox
-admin_email = os.environ["ADMIN_EMAIL"]
+ADMIN_EMAIL = os.environ["ADMIN_EMAIL"]               # 📩 receive enquiries
+SENDER_EMAIL = os.environ["SENDER_EMAIL"]
+RESEND_API_KEY = os.environ["RESEND_API_KEY"]
 
-# Resend
-resend.api_key = os.environ["RESEND_API_KEY"]
-sender_email = os.environ["SENDER_EMAIL"]   # must be onboarding@resend.dev
+JWT_SECRET = os.environ["JWT_SECRET"]
+JWT_ALGORITHM = os.environ["JWT_ALGORITHM"]
+JWT_EXPIRATION_HOURS = int(os.environ["JWT_EXPIRATION_HOURS"])
 
-jwt_secret = os.environ["JWT_SECRET"]
-jwt_algorithm = os.environ["JWT_ALGORITHM"]
-jwt_expiration = int(os.environ["JWT_EXPIRATION_HOURS"])
+resend.api_key = RESEND_API_KEY
 
 # ---------------- DB ----------------
 client = AsyncIOMotorClient(mongo_url)
@@ -71,6 +69,7 @@ class MessageCreate(BaseModel):
     email: EmailStr
     subject: str
     message: str
+    type: str  # enquiry / feedback
 
 class TokenResponse(BaseModel):
     access_token: str
@@ -86,13 +85,13 @@ def verify_password(plain, hashed):
     return bcrypt.checkpw(plain.encode(), hashed.encode())
 
 def create_access_token(data):
-    expire = datetime.now(timezone.utc) + timedelta(hours=jwt_expiration)
+    expire = datetime.now(timezone.utc) + timedelta(hours=JWT_EXPIRATION_HOURS)
     data.update({"exp": expire})
-    return jwt.encode(data, jwt_secret, algorithm=jwt_algorithm)
+    return jwt.encode(data, JWT_SECRET, algorithm=JWT_ALGORITHM)
 
 def decode_token(token):
     try:
-        return jwt.decode(token, jwt_secret, algorithms=[jwt_algorithm])
+        return jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
     except:
         raise HTTPException(401, "Invalid token")
 
@@ -124,14 +123,14 @@ async def send_email_to_admin(subject, name, email, user_subject, message):
 
     try:
         response = resend.Emails.send({
-            "from": sender_email,        # onboarding@resend.dev
-            "to": [admin_email],         # teamacy.info@gmail.com
+            "from": SENDER_EMAIL,
+            "to": [ADMIN_EMAIL],   # 📩 teamacy.info@gmail.com
             "subject": subject,
             "html": html
         })
-        logger.info(f"RESEND OK: {response}")
+        logger.info(f"Email sent: {response}")
     except Exception as e:
-        logger.error(f"RESEND ERROR: {e}")
+        logger.error(f"Email failed: {e}")
 
 # ---------------- ROUTES ----------------
 
@@ -142,13 +141,12 @@ async def root():
 @api_router.post("/auth/register", response_model=TokenResponse)
 async def register(data: UserRegister):
     if await db.users.find_one({"email": data.email}):
-        raise HTTPException(400, "Email exists")
+        raise HTTPException(400, "Email already exists")
 
     user = User(name=data.name, email=data.email)
     doc = user.model_dump()
     doc["password_hash"] = hash_password(data.password)
     doc["created_at"] = doc["created_at"].isoformat()
-
     await db.users.insert_one(doc)
 
     token = create_access_token({"sub": user.id, "role": user.role})
@@ -164,21 +162,31 @@ async def login(data: UserLogin):
     token = create_access_token({"sub": user.id, "role": user.role})
     return TokenResponse(access_token=token, user=user)
 
-# 🔥 Single message system
+# ---------------- CONTACT (ENQUIRY + FEEDBACK) ----------------
+
 @api_router.post("/contact")
 async def contact(data: MessageCreate):
     msg = data.model_dump()
     msg["created_at"] = datetime.now(timezone.utc).isoformat()
+
     await db.messages.insert_one(msg)
 
-    await send_email_to_admin("New Message – Teamacy", data.name, data.email, data.subject, data.message)
+    await send_email_to_admin(
+        f"New {data.type.capitalize()} – Teamacy",
+        data.name,
+        data.email,
+        data.subject,
+        data.message
+    )
+
     return {"status": "ok"}
 
 # ---------------- ADMIN DASHBOARD ----------------
 
 @api_router.get("/admin/messages")
 async def get_messages(admin: User = Depends(get_current_admin)):
-    return await db.messages.find({}, {"_id": 0}).sort("created_at", -1).to_list(1000)
+    msgs = await db.messages.find({}, {"_id": 0}).sort("created_at", -1).to_list(1000)
+    return msgs
 
 # ---------------- ADMIN AUTO CREATE ----------------
 
@@ -188,16 +196,16 @@ async def create_admin():
 
     admin = User(
         name="Teamacy Admin",
-        email=admin_login_email,
+        email=ADMIN_LOGIN_EMAIL,
         role="admin"
     )
 
     doc = admin.model_dump()
-    doc["password_hash"] = hash_password(admin_password)
+    doc["password_hash"] = hash_password(ADMIN_PASSWORD)
     doc["created_at"] = doc["created_at"].isoformat()
 
     await db.users.insert_one(doc)
-    logger.info(f"Admin created: {admin_login_email}")
+    logger.info(f"Admin created: {ADMIN_LOGIN_EMAIL}")
 
 # ---------------- SETUP ----------------
 
