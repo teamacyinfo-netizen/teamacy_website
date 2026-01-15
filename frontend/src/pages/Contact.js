@@ -11,60 +11,34 @@ const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
 
 const Contact = ({ user, setUser }) => {
-  const [enquiryForm, setEnquiryForm] = useState({
+  const [form, setForm] = useState({
     name: "",
     email: "",
     subject: "",
-    message: ""
+    message: "",
+    type: "enquiry"
   });
 
-  const [feedbackForm, setFeedbackForm] = useState({
-    name: "",
-    email: "",
-    subject: "",
-    message: ""
-  });
+  const [loading, setLoading] = useState(false);
 
-  const [loadingEnquiry, setLoadingEnquiry] = useState(false);
-  const [loadingFeedback, setLoadingFeedback] = useState(false);
-
-  // 🔥 ENQUIRY → unified messages API
-  const handleEnquirySubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoadingEnquiry(true);
+    setLoading(true);
 
     try {
-      await axios.post(`${API}/messages`, {
-        ...enquiryForm,
+      await axios.post(`${API}/messages`, form);
+      toast.success("Message sent successfully!");
+      setForm({
+        name: "",
+        email: "",
+        subject: "",
+        message: "",
         type: "enquiry"
       });
-
-      toast.success("Enquiry sent successfully!");
-      setEnquiryForm({ name: "", email: "", subject: "", message: "" });
     } catch (error) {
-      toast.error("Failed to send enquiry. Try again.");
+      toast.error("Failed to send message. Try again.");
     } finally {
-      setLoadingEnquiry(false);
-    }
-  };
-
-  // 🔥 FEEDBACK → unified messages API
-  const handleFeedbackSubmit = async (e) => {
-    e.preventDefault();
-    setLoadingFeedback(true);
-
-    try {
-      await axios.post(`${API}/messages`, {
-        ...feedbackForm,
-        type: "feedback"
-      });
-
-      toast.success("Feedback sent successfully!");
-      setFeedbackForm({ name: "", email: "", subject: "", message: "" });
-    } catch (error) {
-      toast.error("Failed to send feedback. Try again.");
-    } finally {
-      setLoadingFeedback(false);
+      setLoading(false);
     }
   };
 
@@ -74,83 +48,94 @@ const Contact = ({ user, setUser }) => {
       <Navbar user={user} setUser={setUser} />
 
       {/* HERO */}
-      <section className="relative min-h-[60vh] flex items-center justify-center pt-20">
-        <div className="max-w-7xl mx-auto px-6 md:px-12 py-24 text-center">
-          <motion.h1
-            className="text-5xl md:text-7xl font-heading font-bold mb-6"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-          >
-            Let’s Talk with Teamacy
-          </motion.h1>
-          <p className="text-muted-foreground text-lg">
-            Send us your enquiry or feedback — we’ll respond fast.
-          </p>
-        </div>
+      <section className="pt-24 text-center">
+        <h1 className="text-5xl font-bold mb-4">Contact Teamacy</h1>
+        <p className="text-muted-foreground">Send us an enquiry or feedback</p>
       </section>
 
       {/* CONTACT INFO */}
-      <section className="py-12">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 px-6">
-          <div className="bg-white/5 p-6 rounded-xl text-center">
-            <Mail className="mx-auto text-primary mb-3" />
-            <p>teamacy.info@gmail.com</p>
-          </div>
-          <div className="bg-white/5 p-6 rounded-xl text-center">
-            <Phone className="mx-auto text-primary mb-3" />
-            <p>+91 90255 87446</p>
-          </div>
-          <div className="bg-white/5 p-6 rounded-xl text-center">
-            <MapPin className="mx-auto text-primary mb-3" />
-            <p>India</p>
-          </div>
+      <section className="py-12 grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto px-6">
+        <div className="bg-white/5 p-6 rounded-xl text-center">
+          <Mail className="mx-auto mb-2" />
+          <p>teamacy.info@gmail.com</p>
+        </div>
+        <div className="bg-white/5 p-6 rounded-xl text-center">
+          <Phone className="mx-auto mb-2" />
+          <p>+91 90255 87446</p>
+        </div>
+        <div className="bg-white/5 p-6 rounded-xl text-center">
+          <MapPin className="mx-auto mb-2" />
+          <p>India</p>
         </div>
       </section>
 
-      {/* FORMS */}
-      <section className="py-24">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 px-6">
+      {/* SINGLE FORM */}
+      <section className="py-16 max-w-xl mx-auto px-6">
+        <div className="bg-white/5 p-8 rounded-2xl">
+          <h2 className="text-3xl font-bold mb-6 text-center">
+            Send Enquiry or Feedback
+          </h2>
 
-          {/* ENQUIRY */}
-          <div className="bg-white/5 p-8 rounded-2xl">
-            <h2 className="text-3xl font-bold mb-6">Send Enquiry</h2>
-            <form onSubmit={handleEnquirySubmit} className="space-y-4">
-              <input placeholder="Name" required className="input" value={enquiryForm.name} onChange={e => setEnquiryForm({...enquiryForm, name:e.target.value})} />
-              <input placeholder="Email" required className="input" value={enquiryForm.email} onChange={e => setEnquiryForm({...enquiryForm, email:e.target.value})} />
-              <input placeholder="Subject" required className="input" value={enquiryForm.subject} onChange={e => setEnquiryForm({...enquiryForm, subject:e.target.value})} />
-              <textarea placeholder="Message" required className="input" rows={4} value={enquiryForm.message} onChange={e => setEnquiryForm({...enquiryForm, message:e.target.value})}></textarea>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {/* Type */}
+            <select
+              className="w-full p-3 rounded bg-black/40 border border-white/10"
+              value={form.type}
+              onChange={(e) => setForm({ ...form, type: e.target.value })}
+            >
+              <option value="enquiry">Enquiry</option>
+              <option value="feedback">Feedback</option>
+            </select>
 
-              <button className="btn w-full" disabled={loadingEnquiry}>
-                {loadingEnquiry ? "Sending..." : "Send Enquiry"}
-              </button>
-            </form>
-          </div>
+            <input
+              className="w-full p-3 rounded bg-black/40 border border-white/10"
+              placeholder="Name"
+              required
+              value={form.name}
+              onChange={(e) => setForm({ ...form, name: e.target.value })}
+            />
 
-          {/* FEEDBACK */}
-          <div className="bg-white/5 p-8 rounded-2xl">
-            <h2 className="text-3xl font-bold mb-6">Send Feedback</h2>
-            <form onSubmit={handleFeedbackSubmit} className="space-y-4">
-              <input placeholder="Name" required className="input" value={feedbackForm.name} onChange={e => setFeedbackForm({...feedbackForm, name:e.target.value})} />
-              <input placeholder="Email" required className="input" value={feedbackForm.email} onChange={e => setFeedbackForm({...feedbackForm, email:e.target.value})} />
-              <input placeholder="Subject" required className="input" value={feedbackForm.subject} onChange={e => setFeedbackForm({...feedbackForm, subject:e.target.value})} />
-              <textarea placeholder="Message" required className="input" rows={4} value={feedbackForm.message} onChange={e => setFeedbackForm({...feedbackForm, message:e.target.value})}></textarea>
+            <input
+              className="w-full p-3 rounded bg-black/40 border border-white/10"
+              placeholder="Email"
+              required
+              value={form.email}
+              onChange={(e) => setForm({ ...form, email: e.target.value })}
+            />
 
-              <button className="btn w-full" disabled={loadingFeedback}>
-                {loadingFeedback ? "Sending..." : "Send Feedback"}
-              </button>
-            </form>
-          </div>
+            <input
+              className="w-full p-3 rounded bg-black/40 border border-white/10"
+              placeholder="Subject"
+              required
+              value={form.subject}
+              onChange={(e) => setForm({ ...form, subject: e.target.value })}
+            />
 
+            <textarea
+              className="w-full p-3 rounded bg-black/40 border border-white/10"
+              rows="4"
+              placeholder="Your message"
+              required
+              value={form.message}
+              onChange={(e) => setForm({ ...form, message: e.target.value })}
+            />
+
+            <button
+              className="w-full bg-primary py-3 rounded-full flex justify-center gap-2"
+              disabled={loading}
+            >
+              {loading ? "Sending..." : "Send Message"}
+              <Send size={18} />
+            </button>
+          </form>
         </div>
       </section>
 
       {/* SOCIAL */}
-      <section className="py-20 text-center">
-        <div className="flex justify-center gap-6">
-          <a href="https://www.instagram.com/teamacy_info" target="_blank"><Instagram size={32} /></a>
-          <a href="https://linkedin.com/company/teamacy" target="_blank"><Linkedin size={32} /></a>
-          <a href="https://youtube.com/@teamacy_techpartner" target="_blank"><Youtube size={32} /></a>
-        </div>
+      <section className="py-12 text-center flex justify-center gap-6">
+        <a href="https://www.instagram.com/teamacy_info" target="_blank"><Instagram /></a>
+        <a href="https://linkedin.com/company/teamacy" target="_blank"><Linkedin /></a>
+        <a href="https://youtube.com/@teamacy_techpartner" target="_blank"><Youtube /></a>
       </section>
 
       <Footer />
