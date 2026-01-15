@@ -20,10 +20,12 @@ load_dotenv(ROOT_DIR / ".env")
 mongo_url = os.environ["MONGO_URL"]
 db_name = os.environ["DB_NAME"]
 
-admin_login_email = os.environ["ADMIN_LOGIN_EMAIL"]   # for dashboard login
+# 🔐 Admin login (dashboard)
+admin_login_email = os.environ["ADMIN_LOGIN_EMAIL"]
 admin_password = os.environ["ADMIN_PASSWORD"]
 
-admin_email = os.environ["ADMIN_EMAIL"]               # business inbox
+# 📩 Business inbox
+admin_email = os.environ["ADMIN_EMAIL"]
 resend.api_key = os.environ["RESEND_API_KEY"]
 sender_email = os.environ["SENDER_EMAIL"]
 
@@ -160,7 +162,8 @@ async def login(data: UserLogin):
     token = create_access_token({"sub": user.id, "role": user.role})
     return TokenResponse(access_token=token, user=user)
 
-# 🔥 MERGED ENQUIRY + FEEDBACK
+# ---------------- ENQUIRY & FEEDBACK (SAME DB) ----------------
+
 @api_router.post("/enquiries")
 async def enquiry(data: MessageCreate):
     msg = data.model_dump()
