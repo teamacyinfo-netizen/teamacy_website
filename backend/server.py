@@ -20,14 +20,16 @@ load_dotenv(ROOT_DIR / ".env")
 mongo_url = os.environ["MONGO_URL"]
 db_name = os.environ["DB_NAME"]
 
-# 🔐 Admin login (dashboard)
+# 🔐 Admin login (Dashboard)
 admin_login_email = os.environ["ADMIN_LOGIN_EMAIL"]
 admin_password = os.environ["ADMIN_PASSWORD"]
 
 # 📩 Business inbox
 admin_email = os.environ["ADMIN_EMAIL"]
+
+# Resend
 resend.api_key = os.environ["RESEND_API_KEY"]
-sender_email = os.environ["SENDER_EMAIL"]
+sender_email = os.environ["SENDER_EMAIL"]   # must be onboarding@resend.dev
 
 jwt_secret = os.environ["JWT_SECRET"]
 jwt_algorithm = os.environ["JWT_ALGORITHM"]
@@ -122,14 +124,14 @@ async def send_email_to_admin(subject, name, email, user_subject, message):
 
     try:
         response = resend.Emails.send({
-            "from": sender_email,
-            "to": [admin_email],
+            "from": sender_email,        # onboarding@resend.dev
+            "to": [admin_email],         # teamacy.info@gmail.com
             "subject": subject,
             "html": html
         })
-        logger.info(f"Email sent: {response}")
+        logger.info(f"RESEND OK: {response}")
     except Exception as e:
-        logger.error(f"Email failed: {e}")
+        logger.error(f"RESEND ERROR: {e}")
 
 # ---------------- ROUTES ----------------
 
@@ -162,34 +164,21 @@ async def login(data: UserLogin):
     token = create_access_token({"sub": user.id, "role": user.role})
     return TokenResponse(access_token=token, user=user)
 
-# ---------------- ENQUIRY & FEEDBACK (SAME DB) ----------------
-
-@api_router.post("/enquiries")
-async def enquiry(data: MessageCreate):
+# 🔥 Single message system
+@api_router.post("/contact")
+async def contact(data: MessageCreate):
     msg = data.model_dump()
-    msg["type"] = "enquiry"
     msg["created_at"] = datetime.now(timezone.utc).isoformat()
     await db.messages.insert_one(msg)
 
-    await send_email_to_admin("New Enquiry – Teamacy", data.name, data.email, data.subject, data.message)
-    return {"status": "ok"}
-
-@api_router.post("/feedback")
-async def feedback(data: MessageCreate):
-    msg = data.model_dump()
-    msg["type"] = "feedback"
-    msg["created_at"] = datetime.now(timezone.utc).isoformat()
-    await db.messages.insert_one(msg)
-
-    await send_email_to_admin("New Feedback – Teamacy", data.name, data.email, data.subject, data.message)
+    await send_email_to_admin("New Message – Teamacy", data.name, data.email, data.subject, data.message)
     return {"status": "ok"}
 
 # ---------------- ADMIN DASHBOARD ----------------
 
 @api_router.get("/admin/messages")
-async def get_all_messages(admin: User = Depends(get_current_admin)):
-    msgs = await db.messages.find({}, {"_id": 0}).sort("created_at", -1).to_list(1000)
-    return msgs
+async def get_messages(admin: User = Depends(get_current_admin)):
+    return await db.messages.find({}, {"_id": 0}).sort("created_at", -1).to_list(1000)
 
 # ---------------- ADMIN AUTO CREATE ----------------
 
