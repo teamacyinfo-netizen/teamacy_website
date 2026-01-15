@@ -162,19 +162,19 @@ const Portfolio = ({ user, setUser }) => {
           >
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
               <div>
-                <div className="text-4xl md:text-5xl font-heading font-bold text-white mb-2">500+</div>
+                <div className="text-4xl md:text-5xl font-heading font-bold text-white mb-2">02+</div>
                 <div className="text-muted-foreground">Projects Delivered</div>
               </div>
               <div>
-                <div className="text-4xl md:text-5xl font-heading font-bold text-white mb-2">98%</div>
+                <div className="text-4xl md:text-5xl font-heading font-bold text-white mb-2">99%</div>
                 <div className="text-muted-foreground">Client Satisfaction</div>
               </div>
               <div>
-                <div className="text-4xl md:text-5xl font-heading font-bold text-white mb-2">200+</div>
+                <div className="text-4xl md:text-5xl font-heading font-bold text-white mb-2">02+</div>
                 <div className="text-muted-foreground">Happy Clients</div>
               </div>
               <div>
-                <div className="text-4xl md:text-5xl font-heading font-bold text-white mb-2">15+</div>
+                <div className="text-4xl md:text-5xl font-heading font-bold text-white mb-2">02+</div>
                 <div className="text-muted-foreground">Years Experience</div>
               </div>
             </div>
