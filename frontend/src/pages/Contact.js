@@ -6,36 +6,55 @@ import { toast } from "sonner";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { Toaster } from "../components/ui/sonner";
+import { useNavigate } from "react-router-dom";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
 
 const Contact = ({ user, setUser }) => {
+  const navigate = useNavigate();
+
   const [form, setForm] = useState({
-    name: "",
-    email: "",
     subject: "",
     message: "",
-    type: "enquiry"
+    type: "enquiry",
   });
 
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
+
+    const token = localStorage.getItem("token");
+
+    // 🔐 Login check
+    if (!token) {
+      toast.error("Please login to send enquiry or feedback");
+      navigate("/login");
+      return;
+    }
 
     try {
-      await axios.post(`${API}/messages`, form);
+      setLoading(true);
+
+      await axios.post(
+        `${API}/messages`,
+        {
+          subject: form.subject,
+          message: form.message,
+          type: form.type,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
       toast.success("Message sent successfully!");
-      setForm({
-        name: "",
-        email: "",
-        subject: "",
-        message: "",
-        type: "enquiry"
-      });
+      setForm({ subject: "", message: "", type: "enquiry" });
     } catch (error) {
+      console.error(error);
       toast.error("Failed to send message. Try again.");
     } finally {
       setLoading(false);
@@ -50,7 +69,9 @@ const Contact = ({ user, setUser }) => {
       {/* HERO */}
       <section className="pt-24 text-center">
         <h1 className="text-5xl font-bold mb-4">Contact Teamacy</h1>
-        <p className="text-muted-foreground">Send us an enquiry or feedback</p>
+        <p className="text-muted-foreground">
+          Send us an enquiry or feedback (login required)
+        </p>
       </section>
 
       {/* CONTACT INFO */}
@@ -77,7 +98,7 @@ const Contact = ({ user, setUser }) => {
           </h2>
 
           <form onSubmit={handleSubmit} className="space-y-4">
-            {/* Type */}
+            {/* TYPE */}
             <select
               className="w-full p-3 rounded bg-black/40 border border-white/10"
               value={form.type}
@@ -87,22 +108,7 @@ const Contact = ({ user, setUser }) => {
               <option value="feedback">Feedback</option>
             </select>
 
-            <input
-              className="w-full p-3 rounded bg-black/40 border border-white/10"
-              placeholder="Name"
-              required
-              value={form.name}
-              onChange={(e) => setForm({ ...form, name: e.target.value })}
-            />
-
-            <input
-              className="w-full p-3 rounded bg-black/40 border border-white/10"
-              placeholder="Email"
-              required
-              value={form.email}
-              onChange={(e) => setForm({ ...form, email: e.target.value })}
-            />
-
+            {/* SUBJECT */}
             <input
               className="w-full p-3 rounded bg-black/40 border border-white/10"
               placeholder="Subject"
@@ -111,6 +117,7 @@ const Contact = ({ user, setUser }) => {
               onChange={(e) => setForm({ ...form, subject: e.target.value })}
             />
 
+            {/* MESSAGE */}
             <textarea
               className="w-full p-3 rounded bg-black/40 border border-white/10"
               rows="4"
@@ -120,8 +127,9 @@ const Contact = ({ user, setUser }) => {
               onChange={(e) => setForm({ ...form, message: e.target.value })}
             />
 
+            {/* BUTTON */}
             <button
-              className="w-full bg-primary py-3 rounded-full flex justify-center gap-2"
+              className="w-full bg-primary py-3 rounded-full flex justify-center gap-2 disabled:opacity-50"
               disabled={loading}
             >
               {loading ? "Sending..." : "Send Message"}
@@ -133,9 +141,15 @@ const Contact = ({ user, setUser }) => {
 
       {/* SOCIAL */}
       <section className="py-12 text-center flex justify-center gap-6">
-        <a href="https://www.instagram.com/teamacy_info" target="_blank"><Instagram /></a>
-        <a href="https://linkedin.com/company/teamacy" target="_blank"><Linkedin /></a>
-        <a href="https://youtube.com/@teamacy_techpartner" target="_blank"><Youtube /></a>
+        <a href="https://www.instagram.com/teamacy_info" target="_blank" rel="noreferrer">
+          <Instagram />
+        </a>
+        <a href="https://linkedin.com/company/teamacy" target="_blank" rel="noreferrer">
+          <Linkedin />
+        </a>
+        <a href="https://youtube.com/@teamacy_techpartner" target="_blank" rel="noreferrer">
+          <Youtube />
+        </a>
       </section>
 
       <Footer />
