@@ -166,10 +166,14 @@ async def login(data: UserLogin):
     token = create_access_token({"sub": user.id, "role": user.role})
     return TokenResponse(access_token=token, user=user)
 
-# 📩 PUBLIC MESSAGE ENDPOINT (🔥 FIX)
+# 📩 MESSAGE (🔐 LOGIN REQUIRED – FINAL FIX)
 @api.post("/messages")
-async def send_message(data: MessageCreate):
+async def send_message(
+    data: MessageCreate,
+    user: User = Depends(get_current_user)
+):
     msg = data.model_dump()
+    msg["user_id"] = user.id
     msg["created_at"] = datetime.now(timezone.utc).isoformat()
 
     await db.messages.insert_one(msg)
