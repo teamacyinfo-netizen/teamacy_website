@@ -25,8 +25,25 @@ const Contact = ({ user, setUser }) => {
     e.preventDefault();
     setLoading(true);
 
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      toast.error("Please login to send message");
+      setLoading(false);
+      return;
+    }
+
     try {
-      await axios.post(`${API}/messages`, form);
+      await axios.post(
+        `${API}/messages`,
+        form,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
       toast.success("Message sent successfully!");
       setForm({
         name: "",
@@ -133,9 +150,15 @@ const Contact = ({ user, setUser }) => {
 
       {/* SOCIAL */}
       <section className="py-12 text-center flex justify-center gap-6">
-        <a href="https://www.instagram.com/teamacy_info" target="_blank"><Instagram /></a>
-        <a href="https://linkedin.com/company/teamacy" target="_blank"><Linkedin /></a>
-        <a href="https://youtube.com/@teamacy_techpartner" target="_blank"><Youtube /></a>
+        <a href="https://www.instagram.com/teamacy_info" target="_blank" rel="noreferrer">
+          <Instagram />
+        </a>
+        <a href="https://linkedin.com/company/teamacy" target="_blank" rel="noreferrer">
+          <Linkedin />
+        </a>
+        <a href="https://youtube.com/@teamacy_techpartner" target="_blank" rel="noreferrer">
+          <Youtube />
+        </a>
       </section>
 
       <Footer />
