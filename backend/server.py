@@ -23,7 +23,7 @@ db_name = os.environ["DB_NAME"]
 ADMIN_LOGIN_EMAIL = os.environ["ADMIN_LOGIN_EMAIL"]
 ADMIN_PASSWORD = os.environ["ADMIN_PASSWORD"]
 
-ADMIN_EMAIL = os.environ["ADMIN_EMAIL"]
+ADMIN_EMAIL = os.environ["ADMIN_EMAIL"]        # enquiry / feedback inbox
 SENDER_EMAIL = os.environ["SENDER_EMAIL"]
 RESEND_API_KEY = os.environ["RESEND_API_KEY"]
 
@@ -93,7 +93,7 @@ def decode_token(token: str):
     try:
         return jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
     except:
-        raise HTTPException(401, "Invalid token")
+        raise HTTPException(401, "Invalid or expired token")
 
 async def get_current_user(
     credentials: HTTPAuthorizationCredentials = Depends(security)
@@ -116,20 +116,26 @@ def make_links_clickable(text: str):
 # ---------------- EMAIL ----------------
 
 async def send_email_to_admin(msg: dict):
-    html = f"""
-    <h2>New {msg['type'].title()} – Teamacy</h2>
-    <p><b>Name:</b> {msg['name']}</p>
-    <p><b>Email:</b> {msg['email']}</p>
-    <p><b>Subject:</b> {msg['subject']}</p>
-    <p>{make_links_clickable(msg['message'])}</p>
-    """
+    try:
+        html = f"""
+        <h2>New {msg['type'].title()} – Teamacy</h2>
+        <p><b>Name:</b> {msg['name']}</p>
+        <p><b>Email:</b> {msg['email']}</p>
+        <p><b>Subject:</b> {msg['subject']}</p>
+        <p>{make_links_clickable(msg['message'])}</p>
+        """
 
-    resend.Emails.send({
-        "from": SENDER_EMAIL,
-        "to": [ADMIN_EMAIL],
-        "subject": f"New {msg['type'].title()} – Teamacy",
-        "html": html
-    })
+        response = resend.Emails.send({
+            "from": SENDER_EMAIL,
+            "to": [ADMIN_EMAIL],
+            "subject": f"New {msg['type'].title()} – Teamacy",
+            "html": html
+        })
+
+        logger.info(f"EMAIL SENT SUCCESSFULLY: {response}")
+
+    except Exception as e:
+        logger.error(f"EMAIL FAILED: {e}")
 
 # ---------------- ROUTES ----------------
 
@@ -137,7 +143,8 @@ async def send_email_to_admin(msg: dict):
 async def root():
     return {"message": "Teamacy API running"}
 
-# REGISTER
+# ---------------- AUTH ----------------
+
 @api.post("/auth/register", response_model=TokenResponse)
 async def register(data: RegisterModel):
     if await db.users.find_one({"email": data.email}):
@@ -153,7 +160,6 @@ async def register(data: RegisterModel):
     token = create_access_token({"sub": user.id, "role": user.role})
     return TokenResponse(access_token=token, user=user)
 
-# LOGIN
 @api.post("/auth/login", response_model=TokenResponse)
 async def login(data: UserLogin):
     user_doc = await db.users.find_one({"email": data.email})
@@ -166,11 +172,12 @@ async def login(data: UserLogin):
     token = create_access_token({"sub": user.id, "role": user.role})
     return TokenResponse(access_token=token, user=user)
 
-# 📩 MESSAGE (🔐 LOGIN REQUIRED – FINAL FIX)
+# ---------------- MESSAGE (LOGIN REQUIRED 🔐) ----------------
+
 @api.post("/messages")
 async def send_message(
     data: MessageCreate,
-    user: User = Depends(get_current_user)
+    user: User = Depends(get_current_user)   # 🔐 MUST BE LOGGED IN
 ):
     msg = data.model_dump()
     msg["user_id"] = user.id
@@ -181,10 +188,13 @@ async def send_message(
 
     return {"status": "ok"}
 
-# 👨‍💼 ADMIN DASHBOARD
+# ---------------- ADMIN DASHBOARD ----------------
+
 @api.get("/admin/messages")
 async def get_messages(admin: User = Depends(get_current_admin)):
-    return await db.messages.find({}, {"_id": 0}).sort("created_at", -1).to_list(1000)
+    return await db.messages.find(
+        {}, {"_id": 0}
+    ).sort("created_at", -1).to_list(1000)
 
 # ---------------- ADMIN AUTO CREATE ----------------
 
