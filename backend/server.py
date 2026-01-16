@@ -69,7 +69,7 @@ class MessageCreate(BaseModel):
     email: EmailStr
     subject: str
     message: str
-    type: str
+    type: str   # enquiry | feedback
 
 class TokenResponse(BaseModel):
     access_token: str
@@ -95,7 +95,9 @@ def decode_token(token: str):
     except:
         raise HTTPException(401, "Invalid token")
 
-async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(security)):
+async def get_current_user(
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+):
     payload = decode_token(credentials.credentials)
     user = await db.users.find_one({"id": payload["sub"]})
     if not user:
@@ -135,11 +137,10 @@ async def send_email_to_admin(msg: dict):
 async def root():
     return {"message": "Teamacy API running"}
 
-# 🧾 REGISTER (FIXED)
+# REGISTER
 @api.post("/auth/register", response_model=TokenResponse)
 async def register(data: RegisterModel):
-    existing = await db.users.find_one({"email": data.email})
-    if existing:
+    if await db.users.find_one({"email": data.email}):
         raise HTTPException(400, "Email already registered")
 
     user = User(name=data.name, email=data.email)
@@ -152,7 +153,7 @@ async def register(data: RegisterModel):
     token = create_access_token({"sub": user.id, "role": user.role})
     return TokenResponse(access_token=token, user=user)
 
-# 🔐 LOGIN (FIXED)
+# LOGIN
 @api.post("/auth/login", response_model=TokenResponse)
 async def login(data: UserLogin):
     user_doc = await db.users.find_one({"email": data.email})
@@ -165,14 +166,10 @@ async def login(data: UserLogin):
     token = create_access_token({"sub": user.id, "role": user.role})
     return TokenResponse(access_token=token, user=user)
 
-# 📩 MESSAGE (PROTECTED)
+# 📩 PUBLIC MESSAGE ENDPOINT (🔥 FIX)
 @api.post("/messages")
-async def send_message(
-    data: MessageCreate,
-    user: User = Depends(get_current_user)
-):
+async def send_message(data: MessageCreate):
     msg = data.model_dump()
-    msg["user_id"] = user.id
     msg["created_at"] = datetime.now(timezone.utc).isoformat()
 
     await db.messages.insert_one(msg)
