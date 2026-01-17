@@ -27,34 +27,34 @@ const Navbar = ({ user, setUser }) => {
 
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center space-x-8">
-            <Link to="/" className="text-white hover:text-primary transition-colors" data-testid="nav-home">
-              Home
-            </Link>
-            <Link to="/about" className="text-white hover:text-primary transition-colors" data-testid="nav-about">
-              About
-            </Link>
-            <Link to="/services" className="text-white hover:text-primary transition-colors" data-testid="nav-services">
-              Services
-            </Link>
-            <Link to="/portfolio" className="text-white hover:text-primary transition-colors" data-testid="nav-portfolio">
-              Portfolio
-            </Link>
-            <Link to="/contact" className="text-white hover:text-primary transition-colors" data-testid="nav-contact">
-              Contact
-            </Link>
+            <Link to="/" className="text-white hover:text-primary transition-colors">Home</Link>
+            <Link to="/about" className="text-white hover:text-primary transition-colors">About</Link>
+            <Link to="/services" className="text-white hover:text-primary transition-colors">Services</Link>
+            <Link to="/portfolio" className="text-white hover:text-primary transition-colors">Portfolio</Link>
+            <Link to="/contact" className="text-white hover:text-primary transition-colors">Contact</Link>
 
             {user ? (
               <>
-                {/* USER NAME – TOP RIGHT */}
-                <span className="text-white font-medium">
+                {/* USER NAME – BOX */}
+                <div
+                  className="
+                    px-4 py-2
+                    border border-white/20
+                    bg-white/10
+                    backdrop-blur-md
+                    rounded-md
+                    text-white
+                    font-bold
+                    text-sm
+                  "
+                >
                   {user.name}
-                </span>
+                </div>
 
                 {user.role === 'admin' && (
                   <Link
                     to="/admin/dashboard"
                     className="bg-primary hover:bg-primary/90 text-white px-6 py-2 rounded-full transition-all hover:scale-105"
-                    data-testid="nav-admin-dashboard"
                   >
                     Dashboard
                   </Link>
@@ -63,7 +63,6 @@ const Navbar = ({ user, setUser }) => {
                 <button
                   onClick={handleLogout}
                   className="text-white hover:text-primary transition-colors"
-                  data-testid="nav-logout"
                 >
                   Logout
                 </button>
@@ -72,7 +71,6 @@ const Navbar = ({ user, setUser }) => {
               <Link
                 to="/login"
                 className="bg-primary hover:bg-primary/90 text-white px-6 py-2 rounded-full transition-all hover:scale-105"
-                data-testid="nav-login"
               >
                 Login
               </Link>
@@ -83,7 +81,6 @@ const Navbar = ({ user, setUser }) => {
           <button
             className="md:hidden text-white"
             onClick={() => setIsOpen(!isOpen)}
-            data-testid="mobile-menu-toggle"
           >
             {isOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
@@ -91,36 +88,33 @@ const Navbar = ({ user, setUser }) => {
 
         {/* Mobile Menu */}
         {isOpen && (
-          <div className="md:hidden pb-6 space-y-4" data-testid="mobile-menu">
-            <Link to="/" className="block text-white hover:text-primary transition-colors" onClick={() => setIsOpen(false)}>
-              Home
-            </Link>
-            <Link to="/about" className="block text-white hover:text-primary transition-colors" onClick={() => setIsOpen(false)}>
-              About
-            </Link>
-            <Link to="/services" className="block text-white hover:text-primary transition-colors" onClick={() => setIsOpen(false)}>
-              Services
-            </Link>
-            <Link to="/portfolio" className="block text-white hover:text-primary transition-colors" onClick={() => setIsOpen(false)}>
-              Portfolio
-            </Link>
-            <Link to="/contact" className="block text-white hover:text-primary transition-colors" onClick={() => setIsOpen(false)}>
-              Contact
-            </Link>
+          <div className="md:hidden pb-6 space-y-4">
+            <Link to="/" className="block text-white">Home</Link>
+            <Link to="/about" className="block text-white">About</Link>
+            <Link to="/services" className="block text-white">Services</Link>
+            <Link to="/portfolio" className="block text-white">Portfolio</Link>
+            <Link to="/contact" className="block text-white">Contact</Link>
 
             {user ? (
               <>
-                {/* USER NAME – MOBILE */}
-                <div className="text-white font-medium">
+                {/* USER NAME – BOX (MOBILE) */}
+                <div
+                  className="
+                    inline-block
+                    px-4 py-2
+                    border border-white/20
+                    bg-white/10
+                    rounded-md
+                    text-white
+                    font-bold
+                    text-sm
+                  "
+                >
                   {user.name}
                 </div>
 
                 {user.role === 'admin' && (
-                  <Link
-                    to="/admin/dashboard"
-                    className="block text-white hover:text-primary transition-colors"
-                    onClick={() => setIsOpen(false)}
-                  >
+                  <Link to="/admin/dashboard" className="block text-white">
                     Dashboard
                   </Link>
                 )}
@@ -130,17 +124,13 @@ const Navbar = ({ user, setUser }) => {
                     handleLogout();
                     setIsOpen(false);
                   }}
-                  className="block text-white hover:text-primary transition-colors"
+                  className="block text-white"
                 >
                   Logout
                 </button>
               </>
             ) : (
-              <Link
-                to="/login"
-                className="block text-white hover:text-primary transition-colors"
-                onClick={() => setIsOpen(false)}
-              >
+              <Link to="/login" className="block text-white">
                 Login
               </Link>
             )}
