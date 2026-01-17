@@ -15,7 +15,11 @@ const Navbar = ({ user, setUser }) => {
     <nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-black/40 border-b border-white/10">
       <div className="max-w-7xl mx-auto px-6 md:px-12">
         <div className="flex items-center justify-between h-20">
-          <Link to="/" className="text-2xl font-heading font-bold" data-testid="navbar-logo">
+          <Link
+            to="/"
+            className="text-2xl font-heading font-bold"
+            data-testid="navbar-logo"
+          >
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-violet-400 to-blue-400">
               Teamacy
             </span>
@@ -38,37 +42,35 @@ const Navbar = ({ user, setUser }) => {
             <Link to="/contact" className="text-white hover:text-primary transition-colors" data-testid="nav-contact">
               Contact
             </Link>
-            
+
             {user ? (
-              user.role === 'admin' ? (
-                <>
-                  <Link 
-                    to="/admin/dashboard" 
+              <>
+                {/* USER NAME – TOP RIGHT */}
+                <span className="text-white font-medium">
+                  {user.name}
+                </span>
+
+                {user.role === 'admin' && (
+                  <Link
+                    to="/admin/dashboard"
                     className="bg-primary hover:bg-primary/90 text-white px-6 py-2 rounded-full transition-all hover:scale-105"
                     data-testid="nav-admin-dashboard"
                   >
                     Dashboard
                   </Link>
-                  <button 
-                    onClick={handleLogout} 
-                    className="text-white hover:text-primary transition-colors"
-                    data-testid="nav-logout"
-                  >
-                    Logout
-                  </button>
-                </>
-              ) : (
-                <button 
-                  onClick={handleLogout} 
+                )}
+
+                <button
+                  onClick={handleLogout}
                   className="text-white hover:text-primary transition-colors"
                   data-testid="nav-logout"
                 >
                   Logout
                 </button>
-              )
+              </>
             ) : (
-              <Link 
-                to="/login" 
+              <Link
+                to="/login"
                 className="bg-primary hover:bg-primary/90 text-white px-6 py-2 rounded-full transition-all hover:scale-105"
                 data-testid="nav-login"
               >
@@ -78,7 +80,7 @@ const Navbar = ({ user, setUser }) => {
           </div>
 
           {/* Mobile Menu Button */}
-          <button 
+          <button
             className="md:hidden text-white"
             onClick={() => setIsOpen(!isOpen)}
             data-testid="mobile-menu-toggle"
@@ -105,23 +107,40 @@ const Navbar = ({ user, setUser }) => {
             <Link to="/contact" className="block text-white hover:text-primary transition-colors" onClick={() => setIsOpen(false)}>
               Contact
             </Link>
+
             {user ? (
-              user.role === 'admin' ? (
-                <>
-                  <Link to="/admin/dashboard" className="block text-white hover:text-primary transition-colors" onClick={() => setIsOpen(false)}>
+              <>
+                {/* USER NAME – MOBILE */}
+                <div className="text-white font-medium">
+                  {user.name}
+                </div>
+
+                {user.role === 'admin' && (
+                  <Link
+                    to="/admin/dashboard"
+                    className="block text-white hover:text-primary transition-colors"
+                    onClick={() => setIsOpen(false)}
+                  >
                     Dashboard
                   </Link>
-                  <button onClick={() => { handleLogout(); setIsOpen(false); }} className="block text-white hover:text-primary transition-colors">
-                    Logout
-                  </button>
-                </>
-              ) : (
-                <button onClick={() => { handleLogout(); setIsOpen(false); }} className="block text-white hover:text-primary transition-colors">
+                )}
+
+                <button
+                  onClick={() => {
+                    handleLogout();
+                    setIsOpen(false);
+                  }}
+                  className="block text-white hover:text-primary transition-colors"
+                >
                   Logout
                 </button>
-              )
+              </>
             ) : (
-              <Link to="/login" className="block text-white hover:text-primary transition-colors" onClick={() => setIsOpen(false)}>
+              <Link
+                to="/login"
+                className="block text-white hover:text-primary transition-colors"
+                onClick={() => setIsOpen(false)}
+              >
                 Login
               </Link>
             )}
