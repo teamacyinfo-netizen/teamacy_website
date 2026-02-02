@@ -19,20 +19,7 @@ const Portfolio = ({ user, setUser }) => {
       image: "https://images.unsplash.com/photo-1627543858482-b98694bcb2fe?crop=entropy&cs=srgb&fm=jpg&q=85",
       tags: ["Branding", "Design", "Strategy"]
     },
-    {
-      title: "Tech Conference 2024",
-      category: "Event Management",
-      description: "Organized a 3-day technology conference with 500+ attendees, 50+ speakers, and seamless execution.",
-      image: "https://images.unsplash.com/photo-1618613403887-ed08ea9f8f6e?crop=entropy&cs=srgb&fm=jpg&q=85",
-      tags: ["Event Planning", "Logistics", "Coordination"]
-    },
-    {
-      title: "Digital Marketing Campaign",
-      category: "Digital Marketing",
-      description: "Increased brand awareness by 300% and generated 10x ROI through strategic digital campaigns.",
-      image: "https://images.unsplash.com/photo-1578070581071-d9b52bf80993?crop=entropy&cs=srgb&fm=jpg&q=85",
-      tags: ["SEO", "Social Media", "Content"]
-    },
+    
     {
       title: "Mobile Banking App",
       category: "Software Development",
@@ -162,7 +149,7 @@ const Portfolio = ({ user, setUser }) => {
           >
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
               <div>
-                <div className="text-4xl md:text-5xl font-heading font-bold text-white mb-2">02+</div>
+                <div className="text-4xl md:text-5xl font-heading font-bold text-white mb-2">04+</div>
                 <div className="text-muted-foreground">Projects Delivered</div>
               </div>
               <div>
@@ -170,7 +157,7 @@ const Portfolio = ({ user, setUser }) => {
                 <div className="text-muted-foreground">Client Satisfaction</div>
               </div>
               <div>
-                <div className="text-4xl md:text-5xl font-heading font-bold text-white mb-2">02+</div>
+                <div className="text-4xl md:text-5xl font-heading font-bold text-white mb-2">04+</div>
                 <div className="text-muted-foreground">Happy Clients</div>
               </div>
               <div>

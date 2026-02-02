@@ -64,7 +64,7 @@ const About = ({ user, setUser }) => {
               viewport={{ once: true }}
             >
               <img 
-                src="https://images.unsplash.com/photo-1631038506857-6c970dd9ba02?crop=entropy&cs=srgb&fm=jpg&q=85"
+                src="/photos/web.jpeg"
                 alt="Teamacy team"
                 className="rounded-3xl w-full h-[500px] object-cover border border-white/10"
               />
@@ -82,10 +82,10 @@ const About = ({ user, setUser }) => {
                 Teamacy is a leading digital services company specializing in software development, digital marketing, branding, event management, and comprehensive tech solutions.
               </p>
               <p className="text-lg text-muted-foreground mb-6">
-                With over 15 years of combined experience, we've helped businesses, startups, colleges, institutions, and professionals achieve their goals through innovative and scalable solutions.
+                With over 02 years of combined experience, we've helped businesses, startups, colleges, institutions, and professionals achieve their goals through innovative and scalable solutions.
               </p>
               <p className="text-lg text-muted-foreground">
-                Our team of 50+ dedicated professionals works tirelessly to deliver exceptional results that drive growth and create lasting impact.
+                Our team of 05+ dedicated professionals works tirelessly to deliver exceptional results that drive growth and create lasting impact.
               </p>
             </motion.div>
           </div>
